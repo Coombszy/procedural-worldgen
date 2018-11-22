@@ -35,14 +35,14 @@ public class World_Mesh_Generator : MonoBehaviour {
 		GetComponent<MeshCollider>().sharedMesh = mesh;
 		
 	}
-	void Update () {
-		StartLoc = GetComponent<MeshFilter>().transform.position + new Vector3(COORD_OFFSET, 0, COORD_OFFSET);
-		CreateShape();
-		UpdateMesh();
-		GetComponent<MeshFilter>().mesh = mesh;
-		GetComponent<MeshCollider>().sharedMesh = mesh;
+	// void Update () {
+	// 	StartLoc = GetComponent<MeshFilter>().transform.position + new Vector3(COORD_OFFSET, 0, COORD_OFFSET);
+	// 	CreateShape();
+	// 	UpdateMesh();
+	// 	GetComponent<MeshFilter>().mesh = mesh;
+	// 	GetComponent<MeshCollider>().sharedMesh = mesh;
 		
-	}
+	// }
 	
 	void CreateShape () {
 		vertices = new Vector3[(xSize+1) * (zSize+1)];
