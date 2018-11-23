@@ -21,9 +21,11 @@ public class World_Mesh_Generator : MonoBehaviour {
 	public float Perlin_scale = 300f;
 	public int seed = 3300;
 	public Vector3 octave_offset = new Vector3(100,0,100);
+	public Gradient colour_gradient;
 
 	private Vector3 StartLoc;
 	private int COORD_OFFSET= 5908870;
+	private Color[]  colours;
 	
 
 	void Start () {
@@ -46,7 +48,6 @@ public class World_Mesh_Generator : MonoBehaviour {
 	
 	void CreateShape () {
 		vertices = new Vector3[(xSize+1) * (zSize+1)];
-		int i = 0;
 
 
 		System.Random prng = new System.Random (seed);
@@ -64,14 +65,14 @@ public class World_Mesh_Generator : MonoBehaviour {
 		float maxNoiseHeight = float.MinValue;
 		float minNoiseHeight = float.MaxValue;
 
-		for (int z = (int)Mathf.Floor(StartLoc.z); z <= zSize + (int)Mathf.Floor(StartLoc.z); z ++)
+		for (int z = (int)Mathf.Floor(StartLoc.z), i=0; z <= zSize + (int)Mathf.Floor(StartLoc.z); z++)
 		{
 			for (int x = (int)Mathf.Floor(StartLoc.x); x <= xSize + (int)Mathf.Floor(StartLoc.x); x++)
 			{
 
 
-				float amplitude = 1;
-				float frequency = 1;
+				float amplitude = 4;
+				float frequency = 2;
 				float noiseHeight = 0;
 
 				for (int n = 0; n < octaves; n++) {
@@ -109,6 +110,18 @@ public class World_Mesh_Generator : MonoBehaviour {
 				vert++;tris+=6;
 			}
 			vert++;
+		}
+
+			colours = new Color[vertices.Length];
+			Debug.Log("A="+minNoiseHeight+" B="+maxNoiseHeight);
+			for (int i = 0, z = 0; z <= zSize; z++)
+			{
+				for (int x = 0; x < xSize; x++)
+				{
+						float height = Mathf.InverseLerp(minNoiseHeight,maxNoiseHeight,vertices[i].y);
+						colours[i] =  colour_gradient.Evaluate(height);
+						i++;
+				}
 			}
 	}
 
@@ -118,6 +131,7 @@ public class World_Mesh_Generator : MonoBehaviour {
 		
 		mesh.vertices = vertices;
 		mesh.triangles = triangles;
+		mesh.colors = colours;
 
 		mesh.RecalculateNormals();
 	}
